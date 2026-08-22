@@ -51,6 +51,7 @@ def test_central_diff() -> None:
 # ## Task 1.2 - Test each of the different function types
 
 
+@pytest.mark.task1_2
 @given(small_floats, small_floats)
 def test_simple(a: float, b: float) -> None:
     # Simple add

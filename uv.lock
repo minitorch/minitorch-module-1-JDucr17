@@ -1,0 +1,8 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[[package]]
+name = "minitorch-module-1-jducr17"
+version = "0.1.0"
+source = { virtual = "." }
