@@ -94,9 +94,11 @@ def log_back(x: float, d: float) -> float:
     r"If $f = log$ as above, compute $d \times f'(x)$"
     return 1 / x * d
 
+
 def inv(x: float) -> float:
     "$f(x) = 1/x$"
     return 1.0 / x
+
 
 def inv_back(x: float, d: float) -> float:
     r"If $f(x) = 1/x$ compute $d \times f'(x)$"
@@ -107,7 +109,7 @@ def relu_back(x: float, d: float) -> float:
     r"If $f = relu$ compute $d \times f'(x)$"
     if x <= 0:
         return 0.0
-    
+
     return d
 
 
@@ -129,61 +131,55 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+
+    def apply(values: Iterable[float]) -> Iterable[float]:
+        ret = []
+        for element in values:
+            res = fn(element)
+            ret.append(res)
+
+        return ret
+
+    return apply
 
 
-def negList(ls: Iterable[float]) -> Iterable[float]:
-    "Use `map` and `neg` to negate each element in `ls`"
-    raise NotImplementedError("Need to include this file from past assignment.")
+negList = map(lambda x: -x)
 
 
 def zipWith(
-    fn: Callable[[float, float], float]
+    fn: Callable[[float, float], float],
 ) -> Callable[[Iterable[float], Iterable[float]], Iterable[float]]:
-    """
-    Higher-order zipwith (or map2).
+    """Higher order function that applies function over corresponding elements of two lists"""
 
-    See https://en.wikipedia.org/wiki/Map_(higher-order_function)
+    def apply(first: Iterable[float], second: Iterable[float]) -> Iterable[float]:
+        ret = []
 
-    Args:
-        fn: combine two values
+        for x, y in zip(first, second):
+            res = fn(x, y)
+            ret.append(res)
 
-    Returns:
-        Function that takes two equally sized lists `ls1` and `ls2`, produce a new list by
-         applying fn(x, y) on each pair of elements.
+        return ret
 
-    """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    return apply
 
 
-def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
-    "Add the elements of `ls1` and `ls2` using `zipWith` and `add`"
-    raise NotImplementedError("Need to include this file from past assignment.")
+addLists = zipWith(add)
 
 
 def reduce(
-    fn: Callable[[float, float], float], start: float
+    fn: Callable[[float, float], float],
+    start: float,
 ) -> Callable[[Iterable[float]], float]:
-    r"""
-    Higher-order reduce.
+    """Higher order function that transforms a collection of data into a single cumulative result"""
 
-    Args:
-        fn: combine two values
-        start: start value $x_0$
+    def apply(values: Iterable[float]) -> float:
+        acc = start
+        for value in values:
+            acc = fn(value, acc)
+        return acc
 
-    Returns:
-        Function that takes a list `ls` of elements
-         $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
-         fn(x_1, x_0)))`
-    """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    return apply
 
 
-def sum(ls: Iterable[float]) -> float:
-    "Sum up a list using `reduce` and `add`."
-    raise NotImplementedError("Need to include this file from past assignment.")
-
-
-def prod(ls: Iterable[float]) -> float:
-    "Product of a list using `reduce` and `mul`."
-    raise NotImplementedError("Need to include this file from past assignment.")
+sum = reduce(add, 0)
+prod = reduce(lambda x, y: x * y, 1)
